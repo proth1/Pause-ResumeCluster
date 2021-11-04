@@ -9,7 +9,7 @@ import (
 
 	"fmt"
 
-	"PauseClusterLamda/models"
+	"github.com/castai/Pause-ResumeCluster/models"
 
 	runtime "github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
