@@ -28,9 +28,19 @@ Select "Create access key" and create a key with a name that makes sense for the
 
 ![Alt text](./images/name-api-key.png "name-api-key")
 
-Copy the generated key and add it to the AWS Secret Manager with a key name "CastAI-API". 
+In the AWS Console, go to AWS Secret Manager and select "Store a new secret" 
+
+![Alt text](./images/store-secret.png "store-secret")
+
+Set the "Secret type" to "Other type of secret", use the key/value pair with a key name of: "CastAIKey" and a value of the api key copied from the CastAI Console. 
 
 ![Alt text](./images/config-secret.png "configure-secret")
+
+Select "Next" and configure the name of the secret to be: "CastAI-API" with a description that makes sense. 
+
+![Alt text](./images/secret-manager2.png "secret-manager2")
+
+Select "Next" until the review then save the key. 
 
 ## Create the Lambda Function
 
