@@ -20,7 +20,7 @@ First create an API Key within CastAI and store the key in the AWS Secrets Manag
 
 Login to the CastAI UI, go to the "API" section in the upper left, then go to "API access keys"
 
-![Alt text](./images/api-key-menu "api-key")
+![Alt text](./images/api-key-menu.png "api-key")
 
 Select "Create access key" and create a key with a name that makes sense for the purpose. 
 
