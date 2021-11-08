@@ -38,17 +38,27 @@ Set the "Secret type" to "Other type of secret", use the key/value pair with a k
 
 Select "Next" and configure the name of the secret to be: "CastAI-API" with a description that makes sense. 
 
-![Alt text](./images/secret-manager2.png "secret-manager2")
+![Alt text](./images/secret-manager-2.png "secret-manager2")
 
 Select "Next" until the review then save the key. 
 
 ## Create the Lambda Function
 
-Go to the AWS Lambda section and "Create Function", name the function something intelligent like "Panda-Ardvark-Spitoon", or just **"CastAI-PauseClusterOnSchedule" ** whatever your preference. If you name it something different you can update the build.sh with the new name. 
+Go to the AWS Lambda section and "Create Function", name the function something intelligent like "Panda-Ardvark-Spitoon", or just **"CastAI-PauseClusterOnSchedule"** whatever your preference. If you name it something different you can update the build.sh with the new name. 
+
+![Alt text](./images/create-lambda.png "create-lambda")
 
 Select the Go 1.x runtime and x86_64 architecture, Lambda does not support Go on arm64 at the time this was written. 
 
+![Alt text](./images/config-lambda-2.png "config-lambda")
+
 Leave the default execution role as "Create a new role with basic Lambda permissions" we will expand this role to include access to the Secret APIKey later. 
+
+After creating the function, go to the "Code" tab, and edit the "Runtime settings" section, to change the handler from the default to "pause-resume-cluster" which is the name of our executable. 
+
+![Alt text](./images/update-runtime.png "update-lambda-runtime")
+
+![Alt text](./images/change-handler.png "change-handler")
 
 ## Build the executable and upload
 
