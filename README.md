@@ -73,7 +73,11 @@ The scheduling function is triggered using AWS Eventbridge, go to the AWS EventB
 
 Give the rule a name, in our case we have used "PauseCluster" and "ResumeCluster" for the rules. 
 
+![Alt text](./images/create-rule.png "create-rule")
+
 Under Define Pattern select "Schedule" and "Cron expression", for the cron expression enter the time you wish the cluster to be paused, in the example we use 9pm GMT, 0 9 * * ? *
+
+![Alt text](./images/config-rule.png "config-rule")
 
 In the "Select Targets" section set the Target to "Lambda Function", and select the Lambda function you have created above and uploaded the build. 
 
@@ -82,6 +86,8 @@ Expand the "Configure Input" selection and choose "Constant (json text)", this w
 ```{"clusterNames": ["boutique-110821-pa-AcmeCo"], "action": "pause"}```
 
 The clusterNames field is an array of cluster names in your CastAI Organization what you would like paused, the action is "pause" as we are setting the time the clusters will be paused. 
+
+![Alt text](./images/config-target.png "config-target")
 
 Save the event and create a second event for the resume portion, the second event will be identical to the first but with a different cron expression and the action will be "resume" rather than pause. 
 
@@ -93,15 +99,4 @@ Pause and Resume can be any set of clusters, for example, if you'd like to pause
 
 Call flow for pause/resume workflow
 
-```mermaid
-sequenceDiagram
-EventBridge ->> Lambda: Send Pause Request
-Lambda ->>Secrets Manager: Request CastAI API Key
-Secrets Manager ->> Lambda: Provide CastAI API Key
-Lambda ->> CastAI API: Request list of Clusters
-CastAI API ->> Lambda: Respond with list of Clusters
-Lambda ->> Lambda: Compare list of clusters with clusters to be paused
-Lambda ->> CastAI API: Request cluster be paused/resumed
-CastAI API ->> Lambda: Respond with acknowledgement or error
-
-```
+![Alt text](./images/flow-diagram.png "flow-diagram")
