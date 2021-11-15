@@ -162,7 +162,7 @@ func handleRequest(ctx context.Context, event json.RawMessage) (string, error) {
 		}
 	}
 
-	return "", nil
+	return "Success", nil
 }
 
 func main() {
