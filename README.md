@@ -12,8 +12,6 @@ This tutorial assumed the commands are being run from a machine with a linux com
 - Access to create a Lambda in AWS
 - AWS CLI Configured for your account - Optional, UI can be used as well
 
-
-
 ## Setup the CastAI API Key
 
 First create an API Key within CastAI and store the key in the AWS Secrets Manager. This key will be securely retrieved by the Lambda function in order to interact with the CastAI API's. 
@@ -60,6 +58,14 @@ After creating the function, go to the "Code" tab, and edit the "Runtime setting
 
 ![Alt text](./images/change-handler.png "change-handler")
 
+Add permission for the Lambda function to access the secret created above. Go to the "Configuration" section of the Lambda function, then select "Permissions" tab, this will display the role name, click on the role name to edit the permissions of the Lambda function. 
+
+![Alt text](./images/execution-role.png "execution-role")
+
+Add an in-line policy specifying the ARN of the secret created above, this will allow the Lambda function to retrieve the Cast.AI API Key. 
+
+![Alt text](./images/permissions.png "permissions")
+
 ## Build the executable and upload
 
 Clone the git repository and run `build.sh` 
@@ -98,6 +104,23 @@ Save the event and create a second event for the resume portion, the second even
 ```{"clusterNames": ["boutique-110821-pa-AcmeCo"], "action": "resume"}```
 
 Pause and Resume can be any set of clusters, for example, if you'd like to pause all clusters at the same time, but resume them at different times you could use multiple resume events with a single pause event or vice versa. 
+
+## Testing
+
+In order to validate your lambda is working properly you can use the "Test" section of AWS Lambda, set the **Test event** to "New event" and select the "hello-world" template. In the json body supply the clusterName of the cluster you would like to test and the action "pause", verify in the Cast.AI console the cluster is pausing. Change the action to "resume" and run the test again to verify the cluster resumes operation. 
+
+```{"clusterNames": ["ExampleCluster"], "action": "pause"}```
+
+```{"clusterNames": ["ExampleCluster"], "action": "resume"}```
+
+![Alt text](./images/test-pause.png "test-pause")
+
+The Cast.AI console will switch to "Pausing" then to "Paused" when the operation is complete. 
+
+![Alt text](./images/cast-ai-pausing.png "pausing-target")
+
+Once the operation is complete, change to the resume action, re-run the test and the cluster will re-activate. This will prove the end-to-end works properly. The cluster will now be paused and resumed based on the schedule created for the EventBridge actions. If the cluster needs to be resumed mid-cycle it can be done from the Cast.AI Console or by running the test against the Lambda. 
+
 
 ## Flow Diagram
 
