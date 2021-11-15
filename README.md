@@ -87,7 +87,11 @@ Expand the "Configure Input" selection and choose "Constant (json text)", this w
 
 The clusterNames field is an array of cluster names in your CastAI Organization what you would like paused, the action is "pause" as we are setting the time the clusters will be paused. 
 
+For Pause: 
 ![Alt text](./images/config-target.png "config-target")
+
+For Resume: 
+![Alt text](./images/config-resume.png "config-resume")
 
 Save the event and create a second event for the resume portion, the second event will be identical to the first but with a different cron expression and the action will be "resume" rather than pause. 
 
