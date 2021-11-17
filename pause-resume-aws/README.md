@@ -18,25 +18,25 @@ First create an API Key within CastAI and store the key in the AWS Secrets Manag
 
 Login to the CastAI UI, go to the "API" section in the upper left, then go to "API access keys"
 
-![Alt text](./images/api-key-menu.png "api-key")
+![Alt text](./../images/api-key-menu.png "api-key")
 
 Select "Create access key" and create a key with a name that makes sense for the purpose. 
 
-![Alt text](./images/create-api-key.png "create-api-key")
+![Alt text](../images/create-api-key.png "create-api-key")
 
-![Alt text](./images/name-api-key.png "name-api-key")
+![Alt text](../images/name-api-key.png "name-api-key")
 
 In the AWS Console, go to AWS Secret Manager and select "Store a new secret" 
 
-![Alt text](./images/store-secret.png "store-secret")
+![Alt text](../images/store-secret.png "store-secret")
 
 Set the "Secret type" to "Other type of secret", use the key/value pair with a key name of: "CastAIKey" and a value of the api key copied from the CastAI Console. 
 
-![Alt text](./images/config-secret.png "configure-secret")
+![Alt text](../images/config-secret.png "configure-secret")
 
 Select "Next" and configure the name of the secret to be: "CastAI-API" with a description that makes sense. 
 
-![Alt text](./images/secret-manager-2.png "secret-manager2")
+![Alt text](../images/secret-manager-2.png "secret-manager2")
 
 Select "Next" until the review then save the key. 
 
@@ -44,27 +44,27 @@ Select "Next" until the review then save the key.
 
 Go to the AWS Lambda section and "Create Function", name the function something intelligent like "Panda-Ardvark-Spitoon", or just **"CastAI-PauseClusterOnSchedule"** whatever your preference. If you name it something different you can update the build.sh with the new name. 
 
-![Alt text](./images/create-lambda.png "create-lambda")
+![Alt text](../images/create-lambda.png "create-lambda")
 
 Select the Go 1.x runtime and x86_64 architecture, Lambda does not support Go on arm64 at the time this was written. 
 
-![Alt text](./images/config-lambda-2.png "config-lambda")
+![Alt text](../images/config-lambda-2.png "config-lambda")
 
 Leave the default execution role as "Create a new role with basic Lambda permissions" we will expand this role to include access to the Secret APIKey later. 
 
 After creating the function, go to the "Code" tab, and edit the "Runtime settings" section, to change the handler from the default to "pause-resume-cluster" which is the name of our executable. 
 
-![Alt text](./images/update-runtime.png "update-lambda-runtime")
+![Alt text](../images/update-runtime.png "update-lambda-runtime")
 
-![Alt text](./images/change-handler.png "change-handler")
+![Alt text](../images/change-handler.png "change-handler")
 
 Add permission for the Lambda function to access the secret created above. Go to the "Configuration" section of the Lambda function, then select "Permissions" tab, this will display the role name, click on the role name to edit the permissions of the Lambda function. 
 
-![Alt text](./images/execution-role.png "execution-role")
+![Alt text](../images/execution-role.png "execution-role")
 
 Add an in-line policy specifying the ARN of the secret created above, this will allow the Lambda function to retrieve the Cast.AI API Key. 
 
-![Alt text](./images/permissions.png "permissions")
+![Alt text](../images/permissions.png "permissions")
 
 ## Build the executable and upload
 
@@ -79,11 +79,11 @@ The scheduling function is triggered using AWS Eventbridge, go to the AWS EventB
 
 Give the rule a name, in our case we have used "PauseCluster" and "ResumeCluster" for the rules. 
 
-![Alt text](./images/create-rule.png "create-rule")
+![Alt text](../images/create-rule.png "create-rule")
 
 Under Define Pattern select "Schedule" and "Cron expression", for the cron expression enter the time you wish the cluster to be paused, in the example we use 9pm GMT, 0 9 * * ? *
 
-![Alt text](./images/config-rule.png "config-rule")
+![Alt text](../images/config-rule.png "config-rule")
 
 In the "Select Targets" section set the Target to "Lambda Function", and select the Lambda function you have created above and uploaded the build. 
 
@@ -94,10 +94,10 @@ Expand the "Configure Input" selection and choose "Constant (json text)", this w
 The clusterNames field is an array of cluster names in your CastAI Organization what you would like paused, the action is "pause" as we are setting the time the clusters will be paused. 
 
 For Pause: 
-![Alt text](./images/pause-target.png "pause-target")
+![Alt text](../images/pause-target.png "pause-target")
 
 For Resume: 
-![Alt text](./images/resume-target.png "resume-target")
+![Alt text](../images/resume-target.png "resume-target")
 
 Save the event and create a second event for the resume portion, the second event will be identical to the first but with a different cron expression and the action will be "resume" rather than pause. 
 
@@ -113,11 +113,11 @@ In order to validate your lambda is working properly you can use the "Test" sect
 
 ```{"clusterNames": ["ExampleCluster"], "action": "resume"}```
 
-![Alt text](./images/test-pause.png "test-pause")
+![Alt text](../images/test-pause.png "test-pause")
 
 The Cast.AI console will switch to "Pausing" then to "Paused" when the operation is complete. 
 
-![Alt text](./images/cast-ai-pausing.png "pausing-target")
+![Alt text](../images/cast-ai-pausing.png "pausing-target")
 
 Once the operation is complete, change to the resume action, re-run the test and the cluster will re-activate. This will prove the end-to-end works properly. The cluster will now be paused and resumed based on the schedule created for the EventBridge actions. If the cluster needs to be resumed mid-cycle it can be done from the Cast.AI Console or by running the test against the Lambda. 
 
@@ -126,4 +126,4 @@ Once the operation is complete, change to the resume action, re-run the test and
 
 Call flow for pause/resume workflow
 
-![Alt text](./images/flow-diagram.png "flow-diagram")
+![Alt text](../images/flow-diagram.png "flow-diagram")
