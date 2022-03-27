@@ -28,7 +28,7 @@ The Cloud Scheduler will allow you to issue commands to the function on a cron s
 
 ## Setup the Cast AI Key
 
-First create an API Key within CastAI and store the key in the AWS Secrets Manager. This key will be securely retrieved by the Lambda function in order to interact with the CastAI API's. 
+First create an API Key within CastAI and store the key in the GCP Secret Manager. This key will be securely retrieved by the Lambda function in order to interact with the CastAI API's. 
 
 Login to the CastAI UI, go to the "API" section in the upper left, then go to "API access keys"
 
